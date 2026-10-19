@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Which collars were failing before they went quiet?</title>
+<meta name="description" content="A field failure study on public tracking collar data: could the housekeeping data that solar GPS collars already send have warned earlier than a low battery alarm, and does it show why each collar stopped? 109 solar GPS tags and 24 livestock collars. Bolgac Gulen, 2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#faf9f7;--ink:#1a1d21;--soft:#5b6470;--faint:#8b95a1;--rule:#e2e0dc;--rule2:#c9c5be;--panel:#f3f1ed;--card:#fff;
+  --pos:#2f7d54;--neg:#b03a3a;--accent:#2c4a6b;--amber:#c8860d;--s1:#2a78d6;--s2:#eb6834;
+  --serif:'Newsreader',Georgia,serif;--sans:'IBM Plex Sans',system-ui,sans-serif;--mono:'IBM Plex Mono',ui-monospace,monospace}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;padding-bottom:110px}
+a{color:var(--accent);text-decoration:none;font-weight:500}a:hover{text-decoration:underline}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+header{padding:26px 0 18px;border-bottom:1px solid var(--ink)}
+.eyebrow{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.16em;color:var(--faint);text-transform:uppercase}
+h1{font-family:var(--serif);font-weight:600;font-size:clamp(30px,4.4vw,46px);line-height:1.08;letter-spacing:-.01em;margin:12px 0 14px;max-width:820px;text-wrap:balance}
+.dek{max-width:760px;color:var(--soft);font-size:18.5px;font-family:var(--serif);line-height:1.5}
+.dek strong{color:var(--ink);font-weight:600}
+.byline{margin-top:16px;font-family:var(--mono);font-size:12px;color:var(--faint);display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+section{padding:44px 0 6px}
+.sec-label{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+h2{font-family:var(--serif);font-weight:600;font-size:29px;line-height:1.2;margin-bottom:10px;text-wrap:balance}
+h3{font-family:var(--serif);font-size:20px;font-weight:600}
+p{margin-bottom:12px}
+.lede{color:var(--soft);max-width:760px;margin-bottom:20px}
+.lede strong,.lede em{color:var(--ink)}
+.card{background:var(--card);border:1px solid var(--rule);border-radius:6px;padding:22px 24px;margin-top:16px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-family:var(--mono);font-size:12px;padding:6px 12px;border:1px solid var(--rule2);border-radius:3px;background:var(--card);color:var(--soft);cursor:pointer}
+.chip:hover{color:var(--ink);border-color:var(--soft)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper);font-weight:500}
+.viz{position:relative}.viz svg{width:100%;height:auto;display:block}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--paper);font:12px var(--mono);padding:6px 8px;border-radius:4px;display:none;white-space:nowrap;z-index:5}
+.legend{display:flex;gap:16px;font-size:12px;color:var(--soft);margin:6px 0 0 4px;flex-wrap:wrap}
+.legend span{display:inline-flex;align-items:center;gap:6px}.legend i{width:16px;height:0;border-top:2px solid;display:inline-block}
+.legend i.bar{height:10px;border:0;width:12px}
+.verdict{margin-top:16px;padding:2px 0 2px 16px;border-left:3px solid var(--accent);font-size:15px;max-width:760px}
+.verdict.sting{border-left-color:var(--neg)}.verdict b{color:var(--accent)}.verdict.sting b{color:var(--neg)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);text-align:right;padding:0 0 8px;border-bottom:1px solid var(--rule)}
+th:first-child{text-align:left}
+td{padding:8px 0;border-bottom:1px solid var(--rule);text-align:right;font-variant-numeric:tabular-nums;vertical-align:top}
+td:first-child{text-align:left}td.l{text-align:left}th+th,td+td{padding-left:14px}td.num{white-space:nowrap}
+tr:last-child td{border-bottom:none}
+.tscroll{overflow-x:auto}
+.note{font-size:12.5px;color:var(--faint);margin-top:10px;line-height:1.5}
+.pos{color:var(--pos)}.neg{color:var(--neg)}
+.hint{font-size:12px;color:var(--faint);line-height:1.45}
+code{font-family:var(--mono);font-size:12.5px}
+.quote{font-family:var(--serif);font-size:17px;color:var(--ink);border-left:3px solid var(--amber);padding:2px 0 2px 16px;margin:14px 0;max-width:760px}
+.quote small{display:block;font-family:var(--mono);font-size:11px;color:var(--faint);margin-top:6px}
+.limits{margin-top:22px;border-left:3px solid var(--neg);padding:2px 0 2px 16px;max-width:760px}
+.limits p{font-size:14px;color:var(--soft)}
+.small{font-size:13.5px;color:var(--soft)}
+.gloss{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px 24px;font-size:13px;color:var(--soft);margin-top:10px}
+.gloss b{color:var(--ink);font-family:var(--mono);font-size:12px;font-weight:500}
+footer{border-top:1px solid var(--rule);margin-top:44px;padding:20px 0 30px;font-family:var(--mono);font-size:12px;color:var(--faint)}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+#tour{position:absolute;top:0;left:0;right:0;z-index:50;display:none;pointer-events:none}
+#tour.on{display:block}
+.tour-hl{position:absolute;border:2px solid var(--accent);border-radius:8px;box-shadow:0 0 0 9999px rgba(26,29,33,.55);transition:all .35s ease;pointer-events:none}
+.tour-card{position:absolute;width:min(400px,calc(100vw - 32px));background:var(--card);border:1px solid var(--rule2);border-radius:8px;padding:18px 20px;box-shadow:0 6px 30px rgba(0,0,0,.18);pointer-events:auto}
+.tour-card .tk{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.tour-card p{font-size:14px;line-height:1.55;color:var(--ink);margin:0 0 12px}
+.tour-nav{display:flex;align-items:center;gap:8px}
+.tour-nav .dots{flex:1;display:flex;gap:5px}
+.tour-nav .dots i{width:6px;height:6px;border-radius:50%;background:var(--rule2)}
+.tour-nav .dots i.on{background:var(--accent)}
+.tour-btn{font-family:var(--mono);font-size:12px;padding:7px 14px;border-radius:4px;border:1px solid var(--rule2);background:var(--card);color:var(--soft);cursor:pointer}
+.tour-btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.tour-open{font-family:var(--mono);font-size:12px;padding:6px 12px;border-radius:4px;border:1px solid var(--accent);background:var(--card);color:var(--accent);cursor:pointer}
+.tour-open:hover{background:var(--accent);color:#fff}
+.stat{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:0;background:var(--panel);border:1px solid var(--rule);border-radius:6px;overflow:hidden;margin-top:14px}
+.stat>div{padding:12px 14px;border-left:1px solid var(--rule)}.stat>div:first-child{border-left:none}
+.stat .k{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:4px}
+.stat .n{font-family:var(--mono);font-size:20px;font-weight:500}.stat .s{font-size:11.5px;color:var(--soft);margin-top:3px}
+.howto{font-size:13px;color:var(--soft);margin:8px 0 0;line-height:1.5}
+.howto b{color:var(--ink);font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;margin-right:6px}
+.card-title{font-family:var(--serif);font-size:20px;font-weight:600;margin-bottom:4px}
+.pill{display:inline-block;font-family:var(--mono);font-size:9.5px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--rule2);border-radius:3px;padding:3px 7px;color:var(--soft);white-space:nowrap;margin-left:6px}
+.pill.bad{color:var(--neg);border-color:var(--neg)}
+.pill.ok{color:var(--pos);border-color:var(--pos)}
+.pill.mid{color:var(--amber);border-color:var(--amber)}
+.why{font-size:14.5px;color:var(--ink);background:var(--panel);border-radius:4px;padding:10px 14px;margin:0 0 12px}
+.why b{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-right:6px}
+.qgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px 22px;margin:18px 0 6px;max-width:880px}
+.qgrid div{border-top:1px solid var(--rule);padding-top:8px;font-size:14.5px;line-height:1.5;color:var(--soft)}
+.qgrid b{display:block;font-family:var(--serif);font-size:17px;color:var(--ink);font-weight:600;margin-bottom:2px}
+@media (max-width:640px){.qgrid{grid-template-columns:1fr}}
+.slider{width:100%;max-width:520px;accent-color:var(--accent)}
+.rowsel{cursor:pointer}
+.rowsel:hover td{background:var(--panel)}
+tr.on td{background:#eef2f7}
+.mono{font-family:var(--mono)}
+.flex{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start}
+.grow{flex:1;min-width:280px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}html{scroll-behavior:auto}}
+html{color-scheme:light}
+#answer{padding-top:14px}
+#answer h2{margin-bottom:6px}
+#blufcard{margin-top:8px;padding-top:14px}
+.verdict+p,.verdict+h3{margin-top:16px}
+.dek{max-width:900px}
+.disclose{font-family:var(--sans);font-size:12.5px;color:var(--soft);margin-top:8px;max-width:760px}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:0;background:var(--panel);border:1px solid var(--rule);border-radius:6px;overflow:hidden;margin-top:12px}
+.tiles>div{padding:10px 14px;border-left:1px solid var(--rule)}.tiles>div:first-child{border-left:none}
+.tiles .k{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:3px}
+.tiles .n{font-family:var(--mono);font-size:19px;font-weight:500}.tiles .s{font-size:11.5px;color:var(--soft);margin-top:2px}
+@media (max-width:560px){.tiles{grid-template-columns:1fr}.tiles>div{border-left:none;border-top:1px solid var(--rule)}.tiles>div:first-child{border-top:none}}
+.ctl{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin-top:12px}
+.ctl label{font-family:var(--mono);font-size:12px;color:var(--ink)}
+.ctl output{font-family:var(--mono);font-size:12px;color:var(--accent);font-weight:500}
+.key{display:none;margin:8px 0 0;padding:0;list-style:none;font-size:12.5px;color:var(--soft)}
+.key li{margin:2px 0}.key b{font-family:var(--mono);color:var(--ink);margin-right:6px}
+@media (max-width:560px){.key{display:block}}
+.primer{margin:10px 0 0;padding-left:20px;max-width:780px}
+.primer li{margin-bottom:8px}
+.picker{display:grid;grid-template-columns:200px 1fr;gap:6px 12px;align-items:center;margin-top:8px}
+.picker .lab{font-size:13px;color:var(--ink);line-height:1.3}
+.picker .lab span{display:block;font-family:var(--mono);font-size:11px;color:var(--faint)}
+.sq{display:flex;flex-wrap:wrap;gap:4px}
+.sq button{width:18px;height:18px;padding:0;border:1.5px solid var(--ink);border-radius:3px;background:var(--card);cursor:pointer}
+.sq button.death{background:var(--ink)}
+.sq button.alive{background:var(--neg);border-color:var(--neg)}
+.sq button.vanished{background:#b9b4ac;border-color:#8b857c}
+.sq button:hover{transform:scale(1.25)}
+.sq button[aria-pressed="true"]{outline:2px solid var(--amber);outline-offset:2px}
+@media (max-width:620px){.picker{grid-template-columns:1fr}.picker .lab{margin-top:6px}}
+.swatches{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--soft);margin-top:10px}
+.swatches span{display:inline-flex;align-items:center;gap:6px}
+.swatches i{width:12px;height:12px;border-radius:2px;border:1.5px solid var(--ink);display:inline-block}
+.swatches i.death{background:var(--ink)}.swatches i.alive{background:var(--neg);border-color:var(--neg)}.swatches i.vanished{background:#b9b4ac;border-color:#8b857c}.swatches i.none{background:var(--card)}
+.tagbox{font-size:14px;line-height:1.55;background:var(--panel);border-radius:4px;padding:12px 14px;margin-top:12px}
+.tagbox .t{font-family:var(--mono);font-size:12px;color:var(--faint);margin-bottom:4px}
+.tagbox q{font-family:var(--serif);font-size:15px;color:var(--ink)}
+.six{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px 18px;margin-top:12px}
+.six div{border-top:2px solid var(--neg);padding-top:8px;font-size:13.5px;color:var(--soft);line-height:1.5}
+.six b{font-family:var(--mono);font-size:12px;color:var(--ink)}
+.six button{font:inherit;font-size:12px;color:var(--accent);background:none;border:none;padding:0;cursor:pointer;text-decoration:underline}
+.bench{display:grid;grid-template-columns:minmax(260px,360px) 1fr;gap:18px;align-items:start;margin-top:10px}
+@media (max-width:760px){.bench{grid-template-columns:1fr}}
+.sig{border:1px solid var(--rule);border-radius:6px;background:var(--card);margin-bottom:8px}
+.sig>button{display:flex;width:100%;justify-content:space-between;align-items:center;gap:10px;font:inherit;text-align:left;background:none;border:none;padding:10px 14px;cursor:pointer;color:var(--ink)}
+.sig>button b{font-family:var(--serif);font-size:16.5px;font-weight:600}
+.sig>button span{font-family:var(--mono);font-size:12px;color:var(--faint);white-space:nowrap}
+.sig>button:hover{background:var(--panel)}
+.sig .body{display:none;padding:0 14px 12px;font-size:14px;color:var(--soft)}
+.sig.on{border-color:var(--accent)}.sig.on .body{display:block}
+.sig .body p{margin-bottom:8px}.sig .body b{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:2px}
+svg .part rect{transition:fill .2s,stroke .2s}
+svg .part.hl rect{fill:#fbeee8;stroke:var(--neg);stroke-width:2.5}
+.card.rulecard dl{display:grid;grid-template-columns:170px 1fr;gap:6px 16px;font-size:14px;margin:0}
+.card.rulecard dt{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);padding-top:2px}
+.card.rulecard dd{margin:0;color:var(--ink)}
+@media (max-width:560px){.card.rulecard dl{grid-template-columns:1fr}.card.rulecard dt{padding-top:8px}}
+.fails{margin:10px 0 0;padding-left:20px;max-width:780px}.fails li{margin-bottom:8px;color:var(--ink)}
+.chipsrow{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chip small{color:inherit;opacity:.75;margin-left:4px}
+.chip.early{border-color:var(--neg);color:var(--neg)}
+.chip.early[aria-pressed="true"]{background:var(--neg);border-color:var(--neg);color:#fff}
+</style>
+</head>
+<body>
+<div id="tour"><div class="tour-hl"></div><div class="tour-card"></div></div>
+
+<header><div class="wrap">
+  <div class="eyebrow">A field failure study on public tracking collar data &middot; October 2026</div>
+  <h1>Which collars were failing before they went quiet?</h1>
+  <p class="dek" id="dek">This page asks whether the housekeeping data a solar GPS collar already sends could have warned that it was about to stop, and whether it shows why. It reads the public record of <strong>{{tags}} solar GPS tags</strong> on white storks and <strong>{{b_collars}} GPS collars</strong> on water buffalo; none of it is Halter's or Gallagher's data, and nothing here describes either company's hardware.</p>
+  <div class="byline">
+    <span>Bolga&ccedil; G&uuml;len</span>
+    <a href="https://github.com/bolgacg/collar-triage">github.com/bolgacg/collar-triage</a>
+    <span>Built with Claude, an AI coding assistant; the question, rules and conclusions are mine</span>
+    <button class="tour-open" id="tourbtn">Walk me through it</button>
+  </div>
+</div></header>
+
+<main class="wrap">
+
+<section id="answer">
+  <div class="sec-label">The answer, before anything else</div>
+  <h2>Rules I fixed in advance did no better than a plain low battery alarm</h2>
+  <div class="card" id="blufcard">
+    <div class="viz" id="bluf"></div>
+    <ol class="key" id="blufkey"></ol>
+    <div class="ctl">
+      <label for="budget">False alarm budget:</label>
+      <input type="range" id="budget" class="slider" min="0" max="60" step="0.1" value="30" aria-describedby="budgethint">
+      <output id="budgetout" for="budget"></output>
+    </div>
+    <p class="hint" id="budgethint">Drag it. Left is a stricter alarm that bothers you less and misses more. The tiles say how many of the {{silent}} quiet tags each alarm catches when it may flag at most that share of healthy collar months.</p>
+    <div class="tiles" id="blufstat"></div>
+  </div>
+  <p class="howto"><b>What you see</b>Each line is one alarm traced from its laxest setting to its strictest. Up is the share of the {{silent}} tags that went quiet which the alarm flagged at least two days before their last message; right is the share of healthy collar months it flagged by mistake. <b>How to read</b>Higher and further left is better, and the dashed diagonal is an alarm that fires at random. Dots are single rules at their preset level. <b>What to take</b>The two lines lie on top of each other, so my four rules together add nothing to one voltage threshold, and "stopped moving" is the only single rule far above the diagonal.</p>
+  <div class="qgrid" id="qgrid">
+    <div><b>Did my rules warn earlier than a low battery alarm?</b>No. My four rules warned {{op_warned}} of the {{silent}} tags that went quiet, and a plain low battery alarm with the same false alarms warned {{bat_warned}}.</div>
+    <div><b>Which single sign was worth having?</b>"Stopped moving" warned {{t4_warned}} tags while flagging {{t4_false}} percent of healthy collar months, {{t4_times}} times what chance gives. It finds dead animals and dropped tags, not broken electronics.</div>
+    <div><b>How many endings carried no sign at all?</b>{{none_n}} of {{silent}} looked normal on every field in their last week, so only the unit itself can explain them.</div>
+    <div><b>What about the tags that really failed?</b>On the {{alive_n}} tags whose bird was seen alive after the tag stopped, the low battery alarm warned {{alive_b}} and my rules warned {{alive_t}}.</div>
+  </div>
+  <p class="note">"Fixed in advance" means the rules and thresholds were written down and committed before the daily data was opened (<a href="https://github.com/bolgacg/collar-triage/blob/main/PREREGISTRATION.md">PREREGISTRATION.md</a>); the open circle is that setting. A random alarm allowed the same {{op_false}} percent of false collar months would catch about {{random_at_op}} of the {{silent}}. The false alarm unit was changed once after the first run, for the reason in the change log, and the tie holds in both units: counted in days, both alarms flag about {{op_days}} healthy days per collar year. Data: <a href="https://doi.org/10.5441/001/1.4192t2j4_2">stork tags, Movebank (CC0)</a> and <a href="https://doi.org/10.5281/zenodo.19627348">buffalo collars, Zenodo (CC BY 4.0)</a>.</p>
+</section>
+
+<section id="primer">
+  <div class="sec-label">Before anything else</div>
+  <h2>Five things to know</h2>
+  <p class="lede">This page is about the data a tracking collar sends home, so here is what that data is and what is being counted, in five sentences.</p>
+  <ol class="primer">
+    <li>A <strong>tracking collar</strong> here is a sealed unit: a solar panel charges a battery, the battery powers a GPS receiver that finds the position and a radio that sends it home, and a strap or harness holds it on the animal.</li>
+    <li>Besides the position, every record carries <strong>housekeeping</strong>: the battery voltage, how long the GPS needed for a fix, whether it got one, and a temperature. The fleet team never sees the collar, only this, and when a collar fails its last messages are often the only evidence left.</li>
+    <li>A collar that goes quiet usually stays lost. In a study of over 3,000 wildlife tracking units, about one deployment in five with a known end stopped through a technical fault, and half of those faults were the battery (Hofman and others, 2019).</li>
+    <li>The two alarms a fleet team sets up first are a <strong>last seen alarm</strong>, which fires when no message has arrived for 24 hours, and a <strong>low battery alarm</strong>, which fires when the voltage drops below a set level.</li>
+    <li>This page adds four rules, the <strong>triage</strong>, and asks two things of every collar that went quiet: did any alarm warn at least two days ahead, and does the data show a <strong>signature</strong>, a pattern pointing at one part of the collar?</li>
+  </ol>
+  <div class="card" id="domain">
+    <div class="card-title">What a collar is, and what it tells the fleet team</div>
+    <p class="small">A generic solar GPS collar, drawn as blocks, not any company's design. Each block carries the housekeeping field that watches it. Act four comes back to this drawing.</p>
+    <div class="viz" id="domainviz"></div>
+  </div>
+  <h3 style="margin-top:22px">Terms, in the order they appear</h3>
+  <div class="gloss">
+    <div><b>went quiet</b> The tag's record ends more than 30 days before the dataset does: it stopped sending, or the researchers ended it after finding the logger.</div>
+    <div><b>warned</b> An alarm fired at least 2 days before the tag's last record, within its final 30 days. That leaves 28 days in which a warning counts.</div>
+    <div><b>healthy collar month</b> A 28 day stretch of a tag's normal running, before its final month or on a tag still running at the end. Any alarm in it is a false alarm.</div>
+    <div><b>strictness</b> One factor that scales every threshold of an alarm together. Sweeping it draws the alarm's line on the chart.</div>
+    <div><b>idle and loaded voltage</b> The battery voltage with nothing drawing current, and again while the GPS is running. The stork tags report both.</div>
+    <div><b>time to fix</b> How many seconds the GPS receiver needed to find a position. A receiver that cannot see the sky takes longer or gives up.</div>
+    <div><b>no fix record</b> A record the tag wrote or sent without a valid position.</div>
+    <div><b>stationary</b> Ninety percent of a day's positions within 25 m of each other and of the day before, two days running.</div>
+    <div><b>signature</b> The first of five patterns that fits a tag's last week: stopped moving, battery ran down, GPS lost its fix, reports thinned, or nothing.</div>
+    <div><b>field record</b> What the researchers wrote about the end: the bird died, the bird was seen alive after the tag stopped, the bird vanished, or nothing.</div>
+    <div><b>herd median</b> For the buffalo, the middle value of all collars' message counts on the same day.</div>
+  </div>
+</section>
+
+<section id="theirs">
+  <div class="sec-label">Their words</div>
+  <h2>Why this page and not another</h2>
+  <p class="lede">Two New Zealand job adverts for engineers on livestock collars describe the same loop, from a failure in the field to its cause to the design.</p>
+  <p class="quote">Halter collars aren't serviced, aren't repairable and need to last 6-10 years, anywhere across the globe. To achieve this, we need to know about every failure in the field and how to eliminate it.<small>Halter, Junior Failure Analysis Engineer, Auckland. The same advert asks for "understanding the relationships between in-field events and product failures" and work to "reduce no-fault-founds".</small></p>
+  <p class="quote">If you enjoy getting close to customers, investigating why things work, identifying opportunities to make them better, and seeing your solutions make a tangible difference, you'll feel right at home at eShepherd.<small>Gallagher eShepherd, Mechanical Engineer, Hamilton. Among the duties: "Investigating field performance, reliability issues and warranty concerns" and "Translating customer and field insights into meaningful design improvements."</small></p>
+  <p>The wildlife tracking literature names the same gap from the user's side. In the largest study of tracking collar performance I found, the authors ask manufacturers for a standard way to report failures, and explain why it matters:</p>
+  <p class="quote">In cases where the units cannot be sent back for diagnostics, knowing the circumstances of the failures could help identify the underlying cause.<small>Hofman MPG and others, "Right on track? Performance of satellite telemetry in terrestrial wildlife research", PLOS ONE 14(5): e0216223, 2019 (CC0).</small></p>
+  <p>The circumstances are what this page reads: the last weeks of housekeeping data before each tag stopped. On my own aircraft I chase the same kinds of faults in the same kinds of parts: batteries and power wiring, GNSS and radio links, out in the weather. Finding out why something failed in the field and feeding that back into the design is the part of engineering I like most.</p>
+</section>
+
+<section id="act1">
+  <div class="sec-label">Act one &middot; How early</div>
+  <h2>When the alarms did fire, how much warning did they give?</h2>
+  <p class="why"><b>Why it matters</b>A warning is only worth something if it leaves time to act: to fetch the unit while it can still be found, or to pull it before the evidence is gone.</p>
+  <div class="card" id="leadcard">
+    <div class="viz" id="leadviz"></div>
+    <p class="hint">Each dot is one tag that went quiet, placed at the day its alarm first fired. <b class="mono">Click any dot</b> to open that tag's last 45 days in act two.</p>
+    <div class="viz" id="overlapviz" style="margin-top:14px"></div>
+  </div>
+  <p class="howto"><b>What you see</b>Days of warning before each tag's last record, for my four rules and for the low battery alarm at {{bat_level}} V, the level that gives it the same false alarms. <b>How to read</b>Further left is earlier. The shaded band on the left marks alarms that were already on when the tag's final month began, which is a standing condition rather than a warning. <b>What to take</b>The two alarms warn largely different tags, and a good part of what counts as warning is a condition that had been there for weeks.</p>
+  <div class="verdict"><b>The two alarms catch different endings.</b> They warned {{both}} tags in common and {{either}} between them. Half of my rules' warnings came within {{lead_t_med}} days of the end and half of the battery alarm's within {{lead_b_med}}, but {{lead_t_full}} and {{lead_b_full}} of them were standing alarms that had been on since before the final month.</div>
+  <p class="small" style="margin-top:12px">So the alarms see different failures. The next act asks what those failures looked like, one tag at a time.</p>
+</section>
+
+<section id="act2">
+  <div class="sec-label">Act two &middot; Why each one stopped</div>
+  <h2>What did each tag's last weeks look like?</h2>
+  <p class="why"><b>Why it matters</b>A failure analyst cannot open {{silent}} units. The first job is to sort them, so that units that never failed are not torn down and units that did fail are not filed as lost.</p>
+  <div class="card" id="endcard">
+    <div class="picker" id="picker"></div>
+    <div class="swatches"><span><i class="alive"></i>bird seen alive after the tag stopped</span><span><i class="death"></i>bird recorded dead</span><span><i class="vanished"></i>bird vanished</span><span><i class="none"></i>nothing recorded</span></div>
+    <p class="hint">Each square is one tag, in the row of its signature. <b class="mono">Click a square</b> to see its last 45 days; the box under the charts quotes what the researchers wrote.</p>
+    <div class="viz" id="tagviz" style="margin-top:12px"></div>
+    <div class="tagbox" id="tagbox"></div>
+  </div>
+  <p class="howto"><b>What you see</b>One tag's last 45 days: its daily highest and lowest battery voltage, how many records it made each day and how many had no fix, and how far it moved within each day. <b>How to read</b>The strip on top marks the days a rule fired. A falling voltage band points at power, a collapsing spread at an animal that stopped moving, and a normal last day at something the data cannot see. <b>What to take</b>Most endings fall into the last row, and the "stopped moving" row is almost entirely birds that died.</p>
+  <div class="tscroll" style="margin-top:14px"><table id="crosstab"></table></div>
+  <div class="verdict"><b>A tag that stops moving marks a dead animal, and most endings carry no sign.</b> {{stat_d}} of the {{deaths}} recorded deaths show the "stopped moving" signature, against {{stat_o}} of the other {{others}} endings. But {{none_d}} deaths ended on a normal day, {{none_elec_d}} of them electrocutions on power lines, and the agreement is partly circular, because researchers often date a death from the same stillness in the data.</div>
+  <div id="sixhead"><h3 style="margin-top:26px">The {{alive_n}} tags that really failed</h3>
+  <p class="small">For these the researchers saw the bird alive after the tag went quiet, so the tag itself stopped. They are the units a failure analyst would want first.</p></div>
+  <div class="six" id="six"></div>
+  <div class="verdict sting"><b>On the confirmed failures the plain threshold did better.</b> The low battery alarm warned {{alive_b}} of the {{alive_n}} and my rules {{alive_t}}, one of them for the wrong reason: tag {{misread_tag}} was called "stopped moving", yet its bird was seen afterwards. Tag {{chronic_tag}} sat between {{chronic_lo}} and {{chronic_hi}} V for weeks, and my charge rule, which compares a tag with its own recent past, never saw a chronic low.</div>
+  <p class="small" style="margin-top:12px">Storks are not cattle. The next act tries the same rules on collars worn by livestock, which send less.</p>
+</section>
+
+<section id="act3">
+  <div class="sec-label">Act three &middot; Livestock collars</div>
+  <h2>Does any of this carry over to collars on livestock?</h2>
+  <p class="why"><b>Why it matters</b>Most of what worked on the stork tags rests on the battery voltage. These buffalo collars send only time, position and a temperature, which is nearer the minimum a fleet would have.</p>
+  <div class="card" id="herdcard">
+    <div class="ctl" style="margin-top:0"><label>Collar:</label></div>
+    <div class="chipsrow" id="collarchips"></div>
+    <p class="hint">Red chips are the {{b_early}} collars that stopped at least three days before the study ended. <b class="mono">Click a chip</b> to draw that collar against the herd.</p>
+    <div class="viz" id="herdviz" style="margin-top:10px"></div>
+  </div>
+  <p class="howto"><b>What you see</b>Messages per day from one collar (bars) against the herd median on the same day (line), {{b_start}} to {{b_end}}. <b>How to read</b>A hollow mark is a day the reporting rule fired comparing the collar with its own past; a filled mark is a day it fired comparing the collar with the herd. <b>What to take</b>Comparing with the herd halves the false alarms, because it ignores days when every collar reports less.</p>
+  <div class="verdict"><b>Thinning reports give real warning only when a collar fades out slowly.</b> Comparing each collar with the herd fired on {{b_rel_false}} of {{b_full_days}} collar days of collars that ran to the end ({{b_rel_false_pct}} percent), against {{b_own_false}} for comparing it with its own past ({{b_own_false_pct}} percent). Of the {{b_early}} early stops it fired ahead of the last message for {{b_rel_warned}}, but only {{b_rel_talking}} were still sending at the time; the other {{b_rel_silent}} had already gone quiet and sent a stray message days later, which a last seen alarm would also have caught.</div>
+  <p>The herd comparison earns its keep on outage days. On {{b_outage_days}} days in August, the first on {{b_outage_first}}, at least half the herd sent nothing at all, which points at the network rather than the collars, and {{b_own_false_outage}} of the {{b_own_false}} false alarms from comparing a collar with its own past fell on those days.</p>
+  <p>Two more things carry over, one useful and one not. The only {{b_nofix_total}} messages without a GPS fix among all {{b_messages}} came in the very last messages of {{b_nofix_collars}}, so at the end those two collars could still send but not fix. The "stopped moving" rule never fired, because a buffalo collar's positions scatter a median {{b_spread}} m within a day, against the 25 m the rule needs; that threshold was set for the stork tags and does not transfer. All three real warnings fell in the study's last fortnight, when the herd median had dropped from {{b_herd_june}} messages a day in June to {{b_herd_late_oct}}, so they may be the weather or the season rather than the collars; this page does not test that.</p>
+  <p class="small" style="margin-top:12px">The data sorts endings; it does not prove a cause. The last act maps each signature to the bench work that would.</p>
+</section>
+
+<section id="act4">
+  <div class="sec-label">Act four &middot; From the field to the bench to the design</div>
+  <h2>What would confirm each signature, and what would it change?</h2>
+  <p class="why"><b>Why it matters</b>A signature is a hypothesis. The evidence that settles it comes from the unit on a bench, and the reason to settle it is the design change it points to.</p>
+  <div class="bench" id="benchcard">
+    <div class="viz" id="benchviz"></div>
+    <div id="sigs"></div>
+  </div>
+  <p class="hint">The first signature starts open. <b class="mono">Click another</b> to open it; the drawing marks the parts it points at.</p>
+  <p class="note">These are the standard checks a failure analysis lab runs on a sealed solar GPS unit, written for a generic collar. They do not describe Halter's or Gallagher's hardware or their process.</p>
+  <div class="verdict"><b>The cheapest change is in the firmware, not the housing.</b> {{none_n}} of {{silent}} endings carried no sign in any field, so the unit left nothing for the analyst. A last message on brownout or shock, a stored reset cause, and an explicit "off the animal" state would turn the largest row of act two into rows that point at a part.</div>
+</section>
+
+<section id="card">
+  <div class="sec-label">The rules, as a card</div>
+  <h2>What the triage is, and how good it is</h2>
+  <div class="card rulecard"><dl>
+    <dt>What it is</dt><dd>Four fixed rules read over each tag's daily summary: charge deficit, reports thinned, GPS lost its fix, stopped moving. Any one firing raises the alarm.</dd>
+    <dt>What it predicts</dt><dd>Whether a tag will go quiet within the next 28 days, by firing at least two days before its last record.</dd>
+    <dt>What it reads</dt><dd>Daily highest and lowest battery voltage, records per day, the share of records with no fix, the median time to fix, and how far the tag moved within the day.</dd>
+    <dt>Fitted on</dt><dd>Nothing. Every threshold was written down before the daily data was opened, so there is no training half and no held out half.</dd>
+    <dt>Scored on</dt><dd>{{tags}} stork tags, {{first_year}} to {{cutoff_year}}: {{silent}} that went quiet and {{blocks}} healthy collar months.</dd>
+    <dt>Error</dt><dd>It warned {{op_warned}} of {{silent}} while flagging {{op_false}} percent of healthy collar months; on a fleet of ten thousand collars that would be about {{fleet_false}} collars flagged by mistake every month.</dd>
+    <dt>Against</dt><dd>A low battery alarm at {{bat_level}} V warned {{bat_warned}} at the same false alarms, and a random alarm about {{random_at_op}}.</dd>
+    <dt>Verdict</dt><dd>As a set it is no better than one voltage threshold. Keep "stopped moving" ({{t4_warned}} warned at {{t4_false}} percent false), drop "GPS lost its fix" ({{t3_warned}} at {{t3_false}} percent, a ratio of {{t3_ratio}} to chance).</dd>
+  </dl></div>
+  <p class="small" style="margin-top:12px">One combination was tried after the results were in, so it is a hypothesis for the next fleet, not a result: the low battery alarm at {{combo_level}} V together with "stopped moving" warned {{combo_warned}} tags at {{combo_false}} percent false collar months, where the battery alarm alone at that budget warned {{cm_warned}}.</p>
+</section>
+
+<section id="fails">
+  <div class="sec-label">Where this loses</div>
+  <h2>What the triage gets wrong, and what this page cannot show</h2>
+  <ul class="fails">
+    <li>The four rules tie a single voltage threshold, {{op_warned}} against {{bat_warned}} of {{silent}}, and on the {{alive_n}} confirmed tag failures the threshold did better.</li>
+    <li>At that setting both alarms flag {{op_false}} percent of healthy collar months, which no fleet team would accept as it stands.</li>
+    <li>The GPS rule flagged healthy months about as often as dying ones, {{t3_false}} percent against {{t3_warned}} of {{silent}}, so it is noise on these tags.</li>
+    <li>{{none_n}} of {{silent}} endings show nothing in any field in their last week; the data cannot sort them.</li>
+    <li>One "stopped moving" call was wrong: the bird on tag {{misread_tag}} was seen alive later. A breeding adult standing on its nest is the likely reason; this page does not test it.</li>
+    <li>The charge rule compares a tag with its own past, so it cannot see a battery that has been low for weeks, as on tag {{chronic_tag}}.</li>
+    <li>Storks are not cattle. The tags ride a harness on a bird that flies to Africa, with a different energy budget, mounting and radio coverage, so the method transfers and the numbers do not.</li>
+    <li>The researchers' death records are partly inferred from the same data, so act two's agreement is a consistency check, not independent proof.</li>
+    <li>The buffalo collars send no battery voltage, so a flat battery and a failed radio look the same there, and {{b_early}} early stops are too few to score.</li>
+  </ul>
+</section>
+
+<section id="coda">
+  <div class="sec-label">How it was built</div>
+  <h2>Method, changes, sources</h2>
+  <p><strong>Method.</strong> The build downloads the two public datasets, streams the stork tags' {{s_records}} records into one row per tag per day, runs the alarms over every day of every tag using only that day and the days before it, and scores them. The rules, thresholds and scoring were committed to the repository before the daily data was opened. Nothing is fitted, so there is no split to explain.</p>
+  <p><strong>Changes after the data was read.</strong> Six, all listed with their reasons in <a href="https://github.com/bolgacg/collar-triage/blob/main/PREREGISTRATION.md">PREREGISTRATION.md</a>. The one that touches the headline: false alarms were first counted in days, which made a random alarm look better than any rule, because a random alarm spreads its days over every collar while a real rule bunches them on a few collars in a bad spell. They are now counted per 28 day collar month, which puts a random alarm on the diagonal. The tie holds either way. The field records were also refined from the researchers' free text comments by a fixed keyword rule.</p>
+  <p><strong>Sources.</strong></p>
+  <ul class="primer">
+    <li>Fiedler W, Hilsendegen C, Reis C, Lehmann J, Hilsendegen P, Schmidt H, Wikelski M (2024). Data from: Study "LifeTrack White Stork Rheinland-Pfalz" (2015-2023). Movebank Data Repository. <a href="https://doi.org/10.5441/001/1.4192t2j4_2">doi.org/10.5441/001/1.4192t2j4_2</a>. CC0 1.0. Solar GPS and GSM tags, almost all made by e-obs, worn on a harness.</li>
+    <li>University of Western Macedonia, NATMed PRIMA project (2026). NATMed: GPS tracking and temperature data from water buffalo (Bubalus bubalis) collars at Lake Chimaditida, Greece (June to October 2025). Zenodo. <a href="https://doi.org/10.5281/zenodo.19627348">doi.org/10.5281/zenodo.19627348</a>. CC BY 4.0.</li>
+    <li>Hofman MPG and others (2019). Right on track? Performance of satellite telemetry in terrestrial wildlife research. PLOS ONE 14(5): e0216223. <a href="https://doi.org/10.1371/journal.pone.0216223">doi.org/10.1371/journal.pone.0216223</a>. CC0.</li>
+    <li>The job adverts quoted above: Halter, Junior Failure Analysis Engineer (SEEK, October 2026); Gallagher eShepherd, Mechanical Engineer (SEEK and careers.gallagher.com, October 2026).</li>
+  </ul>
+  <p class="small">Both datasets are used as published. The stork data is cited as its authors ask; the buffalo data is used under CC BY 4.0 with the attribution above. Neither data owner was involved in this page.</p>
+</section>
+
+</main>
+<footer><div class="wrap"><span>Every number on this page is generated by the build script from the sources named above.</span><span>Bolga&ccedil; G&uuml;len, 2026</span></div></footer>
+<div class="tip" id="tip"></div>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -80,4 +80,42 @@ Any of these goes in the headline layer if it happens.
 
 ## Changes after the data was read
 
-None yet.
+1. 19 October, first run. Three deployments did not join to the reference data because the
+   animal name differs only in letter case between the two files ("SÜWE" and "Süwe"). The join
+   now ignores case. No other join changed.
+
+2. 19 October, first run. The preregistered result, exactly as scored above: at the
+   preregistered setting the triage warned 41 of 101 silent tags at 35.0 false alarm days per
+   collar-year; the low-battery alarm at the same budget (3.82 V) warned 40 of 101 at 34.9. By
+   the first criterion under "What would count against the page", the triage adds nothing.
+
+3. 19 October, first run. The false alarm unit is changed from days to 28-day collar-blocks.
+   Counted in days, a random alarm at the same rate would have warned 93 percent of silent tags,
+   far above every rule. That is an artefact of the unit, not a finding: a random alarm spreads
+   its days over every collar, while a real rule bunches them on the few collars going through
+   a bad spell, so the random alarm touches every final window. The page therefore counts, for
+   every 28-day block of healthy running, whether it got at least one false alarm, which is
+   the same question asked of a silent tag's 28 eligible days. A random alarm then lies on the
+   diagonal. The rules, thresholds and warning definition are unchanged, and the day counts are
+   still reported on the page. Under the new unit the tie stands: 41 of 101 against 40 of 101 at
+   30 percent of healthy blocks flagged.
+
+4. 19 October, first run. Each rule is also scored on its own at the preregistered setting,
+   and one combination is tried: the low-battery alarm at 3.70 V together with the stationary
+   rule. Both were chosen after seeing the first run, so the page labels them as exploration and
+   as a hypothesis for the next fleet, not as a result.
+
+5. 19 October, first run. The 30-day definition of a silent tag does not fit the buffalo study,
+   which lasts only 4.7 months. The buffalo collars are described one by one, not scored, and a
+   rule that compares each collar with the rest of the herd on the same day is exploration.
+
+6. 19 October, after reading the researchers' free-text comments. The preregistration checked
+   each ending against three records: a recorded death, a logger found, or nothing. The
+   structured death fields turned out to miss deaths the comments describe ("Electrocuted ca.
+   2016-08-07 near Biebesheim"), and six comments say the tag failed while the bird lived on
+   ("Logger failure after April 2022. Bird has been observed afterwards."). The record is now
+   read from the researchers' own words by a fixed keyword rule, in this order: the tag failed
+   or the bird was seen alive after the tag went quiet; a death is recorded or described; the
+   bird vanished; nothing recorded. Whether the logger was recovered is kept as a separate flag.
+   The rule is in study/score.py, and the page prints each tag's comment beside its class so it
+   can be checked by eye.
