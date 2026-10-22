@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light">
-<title>Which collars were failing before they went quiet?</title>
+<title>Which tags went quiet, and could their own data have said so?</title>
 <meta name="description" content="A field failure study on public tracking collar data: could the housekeeping data that solar GPS collars already send have warned earlier than a low battery alarm, and does it show why each collar stopped? 109 solar GPS tags and 24 livestock collars. Bolgac Gulen, 2026.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -109,6 +109,12 @@ html{color-scheme:light}
 #answer h2{margin-bottom:6px}
 #blufcard{margin-top:8px;padding-top:14px}
 .verdict+p,.verdict+h3{margin-top:16px}
+#protocol{margin:6px 0 16px}
+#protocol .primer{margin-top:6px}
+#fmea{font-size:13.5px}
+#fmea th{text-align:left;padding-right:14px;vertical-align:bottom}
+#fmea td{text-align:left;padding-right:14px;line-height:1.45;min-width:130px}
+#fmea td:first-child{font-weight:600;min-width:150px}
 .dek{max-width:900px}
 .disclose{font-family:var(--sans);font-size:12.5px;color:var(--soft);margin-top:8px;max-width:760px}
 .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:0;background:var(--panel);border:1px solid var(--rule);border-radius:6px;overflow:hidden;margin-top:12px}
@@ -174,8 +180,8 @@ svg .part.hl rect{fill:#fbeee8;stroke:var(--neg);stroke-width:2.5}
 
 <header><div class="wrap">
   <div class="eyebrow">A field failure study on public tracking collar data &middot; October 2026</div>
-  <h1>Which collars were failing before they went quiet?</h1>
-  <p class="dek" id="dek">This page asks whether the housekeeping data a solar GPS collar already sends could have warned that it was about to stop, and whether it shows why. It reads the public record of <strong>109 solar GPS tags</strong> on white storks and <strong>24 GPS collars</strong> on water buffalo; none of it is Halter's or Gallagher's data, and nothing here describes either company's hardware.</p>
+  <h1>Which tags went quiet, and could their own data have said so?</h1>
+  <p class="dek" id="dek">This page asks whether the housekeeping data a solar GPS collar already sends could have warned that it was about to stop, and whether it shows why. It reads the public record of <strong>109 solar GPS tags</strong> on white storks and <strong>24 GPS collars</strong> on water buffalo. It is public research data and describes no company's hardware.</p>
   <div class="byline">
     <span>Bolga&ccedil; G&uuml;len</span>
     <a href="https://github.com/bolgacg/collar-triage">github.com/bolgacg/collar-triage</a>
@@ -205,9 +211,9 @@ svg .part.hl rect{fill:#fbeee8;stroke:var(--neg);stroke-width:2.5}
     <div><b>Did my rules warn earlier than a low battery alarm?</b>No. My four rules warned 41 of the 101 tags that went quiet, and a plain low battery alarm with the same false alarms warned 40.</div>
     <div><b>Which single sign was worth having?</b>"Stopped moving" warned 19 tags while flagging 3 percent of healthy collar months, six times what chance gives. It finds dead animals and dropped tags, not broken electronics.</div>
     <div><b>How many endings carried no sign at all?</b>55 of 101 looked normal on every field in their last week, so only the unit itself can explain them.</div>
-    <div><b>What about the tags that really failed?</b>On the 6 tags whose bird was seen alive after the tag stopped, the low battery alarm warned 3 and my rules warned 2.</div>
+    <div><b>How many endings were confirmed tag failures?</b>6 of 101, where the bird was seen alive after the tag stopped. That is too few to compare alarms on, so act two shows each one.</div>
   </div>
-  <p class="note">"Fixed in advance" means the rules and thresholds were written down and committed before the daily data was opened (<a href="https://github.com/bolgacg/collar-triage/blob/main/PREREGISTRATION.md">PREREGISTRATION.md</a>); the open circle is that setting. A random alarm allowed the same 30 percent of false collar months would catch about 31 of the 101. The false alarm unit was changed once after the first run, for the reason in the change log, and the tie holds in both units: counted in days, both alarms flag about 35 healthy days per collar year. Data: <a href="https://doi.org/10.5441/001/1.4192t2j4_2">stork tags, Movebank (CC0)</a> and <a href="https://doi.org/10.5281/zenodo.19627348">buffalo collars, Zenodo (CC BY 4.0)</a>.</p>
+  <p class="note">"Fixed in advance" means the rules and thresholds were written down and committed before the daily data was opened (<a href="https://github.com/bolgacg/collar-triage/blob/main/PREREGISTRATION.md">PREREGISTRATION.md</a>); the open circle is that setting. The low battery alarm's level, by contrast, was chosen on the same data it is scored on, which favours it. A random alarm allowed the same 30 percent of false collar months would catch about 31 of the 101. The false alarm unit was changed once after the first run, for the reason in the change log, and the tie holds in both units: counted in days, both alarms flag about 35 healthy days per collar year. Data: <a href="https://doi.org/10.5441/001/1.4192t2j4_2">stork tags, Movebank (CC0)</a> and <a href="https://doi.org/10.5281/zenodo.19627348">buffalo collars, Zenodo (CC BY 4.0)</a>.</p>
 </section>
 
 <section id="primer">
@@ -218,7 +224,7 @@ svg .part.hl rect{fill:#fbeee8;stroke:var(--neg);stroke-width:2.5}
     <li>A <strong>tracking collar</strong> here is a sealed unit: a solar panel charges a battery, the battery powers a GPS receiver that finds the position and a radio that sends it home, and a strap or harness holds it on the animal.</li>
     <li>Besides the position, every record carries <strong>housekeeping</strong>: the battery voltage, how long the GPS needed for a fix, whether it got one, and a temperature. The fleet team never sees the collar, only this, and when a collar fails its last messages are often the only evidence left.</li>
     <li>A collar that goes quiet usually stays lost. In a study of over 3,000 wildlife tracking units, about one deployment in five with a known end stopped through a technical fault, and half of those faults were the battery (Hofman and others, 2019).</li>
-    <li>The two alarms a fleet team sets up first are a <strong>last seen alarm</strong>, which fires when no message has arrived for 24 hours, and a <strong>low battery alarm</strong>, which fires when the voltage drops below a set level.</li>
+    <li>The two simplest alarms are a <strong>last seen alarm</strong>, which fires when no message has arrived for 24 hours, and a <strong>low battery alarm</strong>, which fires when the voltage drops below a set level.</li>
     <li>This page adds four rules, the <strong>triage</strong>, and asks two things of every collar that went quiet: did any alarm warn at least two days ahead, and does the data show a <strong>signature</strong>, a pattern pointing at one part of the collar?</li>
   </ol>
   <div class="card" id="domain">
@@ -242,13 +248,10 @@ svg .part.hl rect{fill:#fbeee8;stroke:var(--neg);stroke-width:2.5}
   </div>
 </section>
 
-<section id="theirs">
-  <div class="sec-label">Their words</div>
-  <h2>Why this page and not another</h2>
-  <p class="lede">Two New Zealand job adverts for engineers on livestock collars describe the same loop, from a failure in the field to its cause to the design.</p>
-  <p class="quote">Halter collars aren't serviced, aren't repairable and need to last 6-10 years, anywhere across the globe. To achieve this, we need to know about every failure in the field and how to eliminate it.<small>Halter, Junior Failure Analysis Engineer, Auckland. The same advert asks for "understanding the relationships between in-field events and product failures" and work to "reduce no-fault-founds".</small></p>
-  <p class="quote">If you enjoy getting close to customers, investigating why things work, identifying opportunities to make them better, and seeing your solutions make a tangible difference, you'll feel right at home at eShepherd.<small>Gallagher eShepherd, Mechanical Engineer, Hamilton. Among the duties: "Investigating field performance, reliability issues and warranty concerns" and "Translating customer and field insights into meaningful design improvements."</small></p>
-  <p>The wildlife tracking literature names the same gap from the user's side. In the largest study of tracking collar performance I found, the authors ask manufacturers for a standard way to report failures, and explain why it matters:</p>
+<section id="why">
+  <div class="sec-label">Why this question</div>
+  <h2>Most collars that fail never come back to a bench</h2>
+  <p class="lede">The largest study of tracking collar performance I found asks manufacturers for a standard way to report failures, and gives this reason:</p>
   <p class="quote">In cases where the units cannot be sent back for diagnostics, knowing the circumstances of the failures could help identify the underlying cause.<small>Hofman MPG and others, "Right on track? Performance of satellite telemetry in terrestrial wildlife research", PLOS ONE 14(5): e0216223, 2019 (CC0).</small></p>
   <p>The circumstances are what this page reads: the last weeks of housekeeping data before each tag stopped. On my own aircraft I chase the same kinds of faults in the same kinds of parts: batteries and power wiring, GNSS and radio links, out in the weather. Finding out why something failed in the field and feeding that back into the design is the part of engineering I like most.</p>
 </section>
@@ -282,9 +285,9 @@ svg .part.hl rect{fill:#fbeee8;stroke:var(--neg);stroke-width:2.5}
   <div class="tscroll" style="margin-top:14px"><table id="crosstab"></table></div>
   <div class="verdict"><b>A tag that stops moving marks a dead animal, and most endings carry no sign.</b> 24 of the 76 recorded deaths show the "stopped moving" signature, against 1 of the other 25 endings. But 39 deaths ended on a normal day, 14 of them electrocutions on power lines, and the agreement is partly circular, because researchers often date a death from the same stillness in the data.</div>
   <div id="sixhead"><h3 style="margin-top:26px">The 6 tags that really failed</h3>
-  <p class="small">For these the researchers saw the bird alive after the tag went quiet, so the tag itself stopped. They are the units a failure analyst would want first.</p></div>
+  <p class="small">For these the researchers saw the bird alive after the tag went quiet, so the tag itself stopped. They are the units a failure analyst would want first. Each card gives what the tag's own data showed in its last 45 days.</p></div>
   <div class="six" id="six"></div>
-  <div class="verdict sting"><b>On the confirmed failures the plain threshold did better.</b> The low battery alarm warned 3 of the 6 and my rules 2, one of them for the wrong reason: tag 7204 was called "stopped moving", yet its bird was seen afterwards. Tag 7203 sat between 3.69 and 3.75 V for weeks, and my charge rule, which compares a tag with its own recent past, never saw a chronic low.</div>
+  <div class="verdict"><b>Six confirmed failures are too few to compare alarms on, but each one says something.</b> Tag 7204 was called "stopped moving", yet its bird was seen afterwards, so that call was wrong. Tag 7203 sat between 3.69 and 3.75 V for weeks, and my charge rule, which compares a tag with its own recent past, never saw a chronic low.</div>
   <p class="small" style="margin-top:12px">Storks are not cattle. The next act tries the same rules on collars worn by livestock, which send less.</p>
 </section>
 
@@ -306,16 +309,38 @@ svg .part.hl rect{fill:#fbeee8;stroke:var(--neg);stroke-width:2.5}
 </section>
 
 <section id="act4">
-  <div class="sec-label">Act four &middot; From the field to the bench to the design</div>
-  <h2>What would confirm each signature, and what would it change?</h2>
-  <p class="why"><b>Why it matters</b>A signature is a hypothesis. The evidence that settles it comes from the unit on a bench, and the reason to settle it is the design change it points to.</p>
+  <div class="sec-label">Act four &middot; From the field to the bench</div>
+  <h2>What the data would need to carry</h2>
+  <p class="why"><b>Why it matters</b>A signature is a hypothesis. The unit on a bench settles it, and what a unit reports decides how many endings can be sorted at all.</p>
+  <div class="card" id="protocol">
+    <div class="card-title">A returned unit, in order</div>
+    <ol class="primer">
+      <li><strong>As received.</strong> Photograph and weigh it, record the serial, keep a chain of custody, and read its stored log before powering it.</li>
+      <li><strong>Without opening it.</strong> Microscope inspection, X-ray or CT for cracked joints and board flex, acoustic microscopy for voids under the panel lamination, a pressure decay leak test, then a bench supply with the current logged.</li>
+      <li><strong>Under stress.</strong> If it works at rest, the fault did not reproduce, which is not the same as no fault. Thermal cycling, a humidity soak, flex and vibration while it is monitored, and an antenna test on a body loaded fixture, before anything is called no fault found.</li>
+      <li><strong>Opening it.</strong> An immersion repeat, then teardown: cross sections of suspect joints, residue analysis for corrosion, and a cell test for capacity and internal resistance with the precautions a lithium cell needs.</li>
+      <li><strong>Closing it.</strong> The cause, the evidence for it, and whether it reproduced, written down and matched to the field data that came with the unit.</li>
+    </ol>
+  </div>
   <div class="bench" id="benchcard">
     <div class="viz" id="benchviz"></div>
     <div id="sigs"></div>
   </div>
   <p class="hint">The first signature starts open. <b class="mono">Click another</b> to open it; the drawing marks the parts it points at.</p>
-  <p class="note">These are the standard checks a failure analysis lab runs on a sealed solar GPS unit, written for a generic collar. They do not describe Halter's or Gallagher's hardware or their process.</p>
-  <div class="verdict"><b>The cheapest change is in the firmware, not the housing.</b> 55 of 101 endings carried no sign in any field, so the unit left nothing for the analyst. A last message on brownout or shock, a stored reset cause, and an explicit "off the animal" state would turn the largest row of act two into rows that point at a part.</div>
+  <h3 style="margin-top:24px">Mechanical failure modes of a neckband, and what each would leave in the data</h3>
+  <p class="small">Laid out like a design FMEA, without the severity and occurrence scores, which need a real product's history. It is general practice for a solar GPS neckband and describes no company's design.</p>
+  <div class="tscroll"><table id="fmea">
+    <tr><th>Failure mode</th><th>Effect</th><th>Likely cause</th><th>Found on the bench by</th><th>What the field data would show</th></tr>
+    <tr><td>Strap fatigue or tear</td><td class="l">Collar comes off and lies in the paddock</td><td class="l">Neck flexing, abrasion on fences and troughs, sun ageing</td><td class="l">Flex fatigue test against a new strap; fracture surface under a microscope</td><td class="l">Position stops moving while the herd moves</td></tr>
+    <tr><td>Buckle or fastener loosens</td><td class="l">Collar slips, turns or comes off</td><td class="l">Creep under cyclic load, wear, corrosion of metal parts</td><td class="l">Cyclic load test; holding force against new parts</td><td class="l">Daily high voltage falls as the panel turns away from the sky, then stillness</td></tr>
+    <tr><td>Housing crack</td><td class="l">Water gets in and corrosion follows</td><td class="l">Sun ageing, agrochemicals, impact, thermal cycling</td><td class="l">Dye penetrant; cross section of the crack; chemical exposure of moulded test pieces</td><td class="l">Gaps and resets growing over weeks, then silence</td></tr>
+    <tr><td>Seal loses its compression</td><td class="l">Slow water ingress</td><td class="l">Compression set; day and night pressure changes drawing in moist air</td><td class="l">Pressure decay test; immersion repeat; compression set of the gasket</td><td class="l">As for a housing crack, often after months</td></tr>
+    <tr><td>Solar panel delaminates or cracks</td><td class="l">Less charge each day</td><td class="l">Sun ageing, thermal cycling, impact, flexing of the housing</td><td class="l">Current against voltage under a lamp; acoustic microscopy for voids</td><td class="l">Daily high voltage falling for weeks while the rest of the herd holds level</td></tr>
+    <tr><td>Solder joint or connector cracks</td><td class="l">Faults that come and go</td><td class="l">Vibration, flex, thermal cycling</td><td class="l">CT or X-ray; cross section; reproduced under thermal cycling and vibration while monitored</td><td class="l">Gaps and resets with no pattern, often no warning at all</td></tr>
+    <tr><td>Antenna detuned or damaged</td><td class="l">Weaker GPS and radio</td><td class="l">Loading from a wet hide, collar rotation, cracked element</td><td class="l">Return loss in free space and on a body loaded fixture</td><td class="l">Time to fix rising and fewer messages, worse in wet weather</td></tr>
+  </table></div>
+  <p class="note">These checks are general failure analysis practice for a sealed solar GPS unit. They describe no company's hardware or process.</p>
+  <div class="verdict"><b>Most endings left nothing to read.</b> 55 of 101 carried no sign in any field in their last week. Whether those could be sorted depends on what a unit records in its last minutes, such as a final message on brownout or shock and a stored reset cause, and that is a question the next fleet's data could answer.</div>
 </section>
 
 <section id="card">
@@ -328,7 +353,7 @@ svg .part.hl rect{fill:#fbeee8;stroke:var(--neg);stroke-width:2.5}
     <dt>Fitted on</dt><dd>Nothing. Every threshold was written down before the daily data was opened, so there is no training half and no held out half.</dd>
     <dt>Scored on</dt><dd>109 stork tags, 2015 to 2023: 101 that went quiet and 1,446 healthy collar months.</dd>
     <dt>Error</dt><dd>It warned 41 of 101 while flagging 30 percent of healthy collar months; on a fleet of ten thousand collars that would be about 3,000 collars flagged by mistake every month.</dd>
-    <dt>Against</dt><dd>A low battery alarm at 3.82 V warned 40 at the same false alarms, and a random alarm about 31.</dd>
+    <dt>Against</dt><dd>A low battery alarm at 3.82 V warned 40 at the same false alarms, with its level chosen on this same data, and a random alarm about 31.</dd>
     <dt>Verdict</dt><dd>As a set it is no better than one voltage threshold. Keep "stopped moving" (19 warned at 3 percent false), drop "GPS lost its fix" (14 at 13 percent, a ratio of 1.1 to chance).</dd>
   </dl></div>
   <p class="small" style="margin-top:12px">One combination was tried after the results were in, so it is a hypothesis for the next fleet, not a result: the low battery alarm at 3.70 V together with "stopped moving" warned 23 tags at 8 percent false collar months, where the battery alarm alone at that budget warned 9.</p>
@@ -338,8 +363,10 @@ svg .part.hl rect{fill:#fbeee8;stroke:var(--neg);stroke-width:2.5}
   <div class="sec-label">Where this loses</div>
   <h2>What the triage gets wrong, and what this page cannot show</h2>
   <ul class="fails">
-    <li>The four rules tie a single voltage threshold, 41 against 40 of 101, and on the 6 confirmed tag failures the threshold did better.</li>
-    <li>At that setting both alarms flag 30 percent of healthy collar months, which no fleet team would accept as it stands.</li>
+    <li>The four rules tie a single voltage threshold, 41 against 40 of 101, even though the threshold's level was picked on the same data and my rules were fixed before it was read.</li>
+    <li>At that setting both alarms flag 30 percent of healthy collar months, far more than anyone could follow up.</li>
+    <li>The charge rule does not allow for season, cloud or shade, which also move a solar unit's daily high voltage, so many of its false alarms are likely weather; this page does not test it.</li>
+    <li>Only 6 of 101 endings are confirmed tag failures. The rest are birds that died or vanished, so "went quiet" here mostly means the animal, not the unit.</li>
     <li>The GPS rule flagged healthy months about as often as dying ones, 13 percent against 14 of 101, so it is noise on these tags.</li>
     <li>55 of 101 endings show nothing in any field in their last week; the data cannot sort them.</li>
     <li>One "stopped moving" call was wrong: the bird on tag 7204 was seen alive later. A breeding adult standing on its nest is the likely reason; this page does not test it.</li>
@@ -353,14 +380,13 @@ svg .part.hl rect{fill:#fbeee8;stroke:var(--neg);stroke-width:2.5}
 <section id="coda">
   <div class="sec-label">How it was built</div>
   <h2>Method, changes, sources</h2>
-  <p><strong>Method.</strong> The build downloads the two public datasets, streams the stork tags' 12.8 million records into one row per tag per day, runs the alarms over every day of every tag using only that day and the days before it, and scores them. The rules, thresholds and scoring were committed to the repository before the daily data was opened. Nothing is fitted, so there is no split to explain.</p>
-  <p><strong>Changes after the data was read.</strong> Six, all listed with their reasons in <a href="https://github.com/bolgacg/collar-triage/blob/main/PREREGISTRATION.md">PREREGISTRATION.md</a>. The one that touches the headline: false alarms were first counted in days, which made a random alarm look better than any rule, because a random alarm spreads its days over every collar while a real rule bunches them on a few collars in a bad spell. They are now counted per 28 day collar month, which puts a random alarm on the diagonal. The tie holds either way. The field records were also refined from the researchers' free text comments by a fixed keyword rule.</p>
+  <p><strong>Method.</strong> The build downloads the two public datasets, streams the stork tags' 12.8 million records into one row per tag per day, runs the alarms over every day of every tag using only that day and the days before it, and scores them. The rules, thresholds and scoring were written in PREREGISTRATION.md and committed before the daily data was opened (commit 26340c5, 19 October 2026); the code that runs them was written next. Nothing is fitted, so there is no split to explain.</p>
+  <p><strong>Changes after the data was read.</strong> Seven, all listed with their dates and reasons in <a href="https://github.com/bolgacg/collar-triage/blob/main/PREREGISTRATION.md">PREREGISTRATION.md</a>. The one that touches the headline: false alarms were first counted in days, which made a random alarm look better than any rule, because a random alarm spreads its days over every collar while a real rule bunches them on a few collars in a bad spell. They are now counted per 28 day collar month, which puts a random alarm on the diagonal. The tie holds either way. The field records were also refined from the researchers' free text comments by a fixed keyword rule.</p>
   <p><strong>Sources.</strong></p>
   <ul class="primer">
     <li>Fiedler W, Hilsendegen C, Reis C, Lehmann J, Hilsendegen P, Schmidt H, Wikelski M (2024). Data from: Study "LifeTrack White Stork Rheinland-Pfalz" (2015-2023). Movebank Data Repository. <a href="https://doi.org/10.5441/001/1.4192t2j4_2">doi.org/10.5441/001/1.4192t2j4_2</a>. CC0 1.0. Solar GPS and GSM tags, almost all made by e-obs, worn on a harness.</li>
     <li>University of Western Macedonia, NATMed PRIMA project (2026). NATMed: GPS tracking and temperature data from water buffalo (Bubalus bubalis) collars at Lake Chimaditida, Greece (June to October 2025). Zenodo. <a href="https://doi.org/10.5281/zenodo.19627348">doi.org/10.5281/zenodo.19627348</a>. CC BY 4.0.</li>
     <li>Hofman MPG and others (2019). Right on track? Performance of satellite telemetry in terrestrial wildlife research. PLOS ONE 14(5): e0216223. <a href="https://doi.org/10.1371/journal.pone.0216223">doi.org/10.1371/journal.pone.0216223</a>. CC0.</li>
-    <li>The job adverts quoted above: Halter, Junior Failure Analysis Engineer (SEEK, October 2026); Gallagher eShepherd, Mechanical Engineer (SEEK and careers.gallagher.com, October 2026).</li>
   </ul>
   <p class="small">Both datasets are used as published. The stork data is cited as its authors ask; the buffalo data is used under CC BY 4.0 with the attribution above. Neither data owner was involved in this page.</p>
 </section>

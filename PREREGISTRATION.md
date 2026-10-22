@@ -119,3 +119,11 @@ Any of these goes in the headline layer if it happens.
    bird vanished; nothing recorded. Whether the logger was recovered is kept as a separate flag.
    The rule is in study/score.py, and the page prints each tag's comment beside its class so it
    can be checked by eye.
+
+7. 22 October, after publication. The researchers' reference data is now copied into
+   data/storks_reference.csv, so the scoring runs from the committed files alone; before, it was
+   read from the uncommitted download folder. No rule, threshold or number changed: a clean clone
+   rebuilds docs/index.html and docs/data.js byte for byte. On the same day the page stopped
+   comparing the two alarms on the six confirmed tag failures, because six tags cannot carry a
+   comparison, and it now says that the low-battery alarm's level was chosen on the same data it
+   is scored on.

@@ -7,7 +7,7 @@
 
 usage: python3 study/fetch.py
 """
-import json, os, sys, time, urllib.request
+import json, os, shutil, sys, time, urllib.request
 
 ROOT = os.path.join(os.path.dirname(__file__), "..", "data", "raw")
 MOVEBANK = "https://datarepository.movebank.org/server/api"
@@ -65,3 +65,5 @@ def buffalo():
 if __name__ == "__main__":
     storks()
     buffalo()
+    ref = [f for f in os.listdir(os.path.join(ROOT, "storks")) if f.endswith("reference-data.csv")][0]
+    shutil.copyfile(os.path.join(ROOT, "storks", ref), os.path.join(ROOT, "..", "storks_reference.csv"))

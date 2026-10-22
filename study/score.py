@@ -12,7 +12,9 @@ from datetime import date, timedelta
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(HERE, "..", "data")
 STORK_DAILY = os.path.join(DATA, "storks_daily.csv")
-STORK_REF = os.path.join(DATA, "raw", "storks", "LifeTrack White Stork Rheinland-Pfalz_2015-2023-reference-data.csv")
+# The researchers' reference data (how each deployment ended), copied from the download so the
+# scoring runs from the committed files alone. CC0, from the same Movebank package.
+STORK_REF = os.path.join(DATA, "storks_reference.csv")
 BUFFALO_DAILY = os.path.join(DATA, "buffalo_daily.csv")
 
 WINDOW = 30          # final window, days, including the last day

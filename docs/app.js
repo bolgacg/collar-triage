@@ -386,6 +386,15 @@
     }).join('');
     $('#crosstab').innerHTML = head + body;
   }
+  function shows(e) {
+    var t = e.tail, v = t.filter(function (d) { return d[2] !== null; }).map(function (d) { return d[2]; });
+    var rec = t.reduce(function (a, d) { return a + d[1]; }, 0), nofix = t.reduce(function (a, d) { return a + d[4]; }, 0);
+    var days = t.filter(function (d) { return d[1] > 0; }).length;
+    var out = 'last ' + t.length + ' days: records on ' + days + ' days';
+    if (rec) out += ', ' + Math.round(100 * nofix / rec) + '% without a fix';
+    out += v.length ? ', daily high ' + (Math.min.apply(null, v) / 1000).toFixed(2) + ' to ' + (Math.max.apply(null, v) / 1000).toFixed(2) + ' V' : ', no voltage reported';
+    return out;
+  }
   function ahead(n) { return n === null ? 'no warning' : n >= 28 ? 'already on before the final month' : n + ' days ahead'; }
   function sixCards() {
     var host = $('#six'); host.innerHTML = '';
@@ -395,9 +404,9 @@
       if (q.length > 170) q = q.slice(0, 167).replace(/\s+\S*$/, '') + ' [...]';
       var d = document.createElement('div');
       d.innerHTML = '<b>Tag ' + e.tag + '</b> &middot; ' + CAUSE[e.cause].toLowerCase() + '<br>' +
-        'my rules: ' + ahead(e.lead) + '; battery alarm: ' + ahead(e.leadb) +
+        shows(e) +
         '<br><q style="font-family:Newsreader,Georgia,serif;color:#1a1d21">' + q.replace(/</g, '&lt;') + '</q><br>';
-      var b = document.createElement('button'); b.textContent = 'show its last 45 days';
+      var b = document.createElement('button'); b.textContent = 'show its final weeks';
       b.addEventListener('click', function () { selectTag(i); $('#endcard').scrollIntoView({ behavior: 'smooth' }); });
       d.appendChild(b); host.appendChild(d);
     });
@@ -460,24 +469,24 @@
   var SIGS = [
     { id: 'stationary', parts: ['strap'], name: 'Stopped moving', n: V.c_stationary,
       seen: 'Positions within 25 m of each other for two days running before the record ends. ' + D.cross.stationary.death + ' of the ' + V.c_stationary + ' stork tags with this signature belonged to a bird recorded dead.',
-      bench: 'Recover the unit from its last position. Inspect the strap, stitching and buckle for fatigue cracks, wear and sun damage, and pull test them against new parts. Power the electronics on a bench supply: if they run, the unit is no fault found and the cause is the animal or the mounting.',
-      design: 'A firmware state for "off the animal or animal down", from no motion together with a temperature that follows the air instead of the body, sent as its own message instead of left for the analyst to infer.' },
+      bench: 'Recover the unit and photograph it as received. Inspect the strap, stitching and buckle for fatigue cracks, abrasion and sun damage, and pull test them against new parts. Run the electronics on a bench supply. If they work, the fault did not reproduce at rest, which is not the same as no fault, so repeat under thermal cycling, flex and humidity while monitoring before putting the ending down to the animal or the mounting.',
+      data: 'Was the unit still on a moving animal? GPS scatter answers that only roughly; a motion count from the accelerometer would answer it directly.' },
     { id: 'energy', parts: ['panel', 'charger', 'battery'], name: 'Battery or charging ran down', n: V.c_energy,
-      seen: 'The daily high voltage falls 100 mV below its recent level for two days, or the last day ends below 3.70 V. The plain threshold catches a battery that has been low for weeks, which this rule misses.',
-      bench: 'Measure the cell’s capacity and internal resistance against a new cell. Trace the panel’s current against voltage under a calibrated lamp and inspect it for cracks, delamination and dirt. Watch the charger input and output on an oscilloscope at low light, and measure the sleep current with a precision meter.',
-      design: 'More panel area facing the sky, or more energy margin for the darkest month. Report the charging current as well as the voltage, so a dirty panel and a tired cell look different in the data.' },
+      seen: 'The daily high voltage falls 100 mV below its recent level for two days, or the last day ends below 3.70 V. Cloud, season and shade move the daily high too, and this rule does not separate them.',
+      bench: 'Measure the cell\u2019s capacity and internal resistance against a new cell, with the precautions a lithium cell needs. Trace the panel\u2019s current against voltage under a calibrated lamp and look for cracks, delamination and voids under the lamination. Watch the charger input and output on an oscilloscope at low light, and measure the sleep current.',
+      data: 'Was the panel delivering current, or had the cell stopped holding it? Voltage alone cannot tell a dirty panel from a tired cell or a charger fault; charging current and cell temperature would.' },
     { id: 'gps', parts: ['gps'], name: 'GPS lost its fix', n: V.c_gps,
-      seen: 'Half the day’s records without a fix, or a time to fix at least double its recent level. On the stork tags this rule was no better than chance, so treat the row as weak evidence.',
-      bench: 'Compare the antenna’s return loss with a good unit on a network analyser, test the receiver’s sensitivity with an attenuated or simulated satellite signal, and inspect the antenna feed joint under a microscope. Check how the unit sits on the animal: an antenna facing the ground sees little sky.',
-      design: 'Antenna placement and ground plane away from the battery. Report satellite count and signal strength, so the analyst can tell a blocked sky from a dead receiver.' },
+      seen: 'Half the day\u2019s records without a fix, or a time to fix at least double its recent level. On the stork tags this rule was no better than chance, partly because time to fix also grows with the gap since the previous fix.',
+      bench: 'Compare the antenna\u2019s return loss with a good unit, in free space and on a body loaded fixture, since a wet hide detunes an antenna. Test the receiver\u2019s sensitivity with an attenuated or simulated satellite signal, and check the antenna feed joint by X-ray or cross section.',
+      data: 'Was the sky blocked or the receiver weak? A satellite count and signal strength with every fix would answer it.' },
     { id: 'reporting', parts: ['radio'], name: 'Reports thinned out, battery fine', n: V.c_reporting,
-      seen: 'Fewer than half the usual records on two days running while the voltage stays normal. On the buffalo collars, comparing with the herd on the same day separates this from a bad day for everyone.',
-      bench: 'Measure transmit power and the current during a transmit burst, with an oscilloscope on the supply rail to catch dips that reset the unit. Check the antenna and its seal for water ingress with a pressure decay or dye test, and read the network registration log.',
-      design: 'Supply decoupling sized for the transmit burst, and store and forward with retries, so a coverage gap delays data instead of losing it.' },
+      seen: 'Fewer than half the usual records on two days running while the voltage stays normal. On the stork tags this also happens when a tag cuts its own schedule or the researchers change it, so the row mixes radio faults with programming. On the buffalo collars, comparing with the herd separates a collar from a bad day for everyone.',
+      bench: 'Measure transmit power and the current during a transmit burst, with an oscilloscope on the supply rail to catch dips that reset the unit. Check the antenna and its seal for water ingress with a pressure decay test, then an immersion repeat.',
+      data: 'Did the unit try to send and fail, or not try at all? A count of attempted and failed transmissions would answer it.' },
     { id: 'none', parts: ['proc', 'battery', 'radio', 'gps'], name: 'No warning in any field', n: V.c_none,
       seen: 'A normal last day on every field, then nothing. On the stork tags ' + V.none_d + ' of these ' + V.c_none + ' were birds recorded dead, ' + V.none_elec_d + ' of them electrocuted on power lines, which can end a tag and its bird in the same minute.',
-      bench: 'The unit is the only evidence. X-ray it for cracked joints and board flex, then open it for corrosion, impact damage and heat marks.',
-      design: 'A last message on brownout or shock, and a reset cause stored and sent at the next start, so the next silent unit carries its own reason.' }
+      bench: 'The unit is the only evidence. CT or X-ray it for cracked joints and board flex, cross section suspect joints, analyse residues for corrosion, and look for impact damage and heat marks.',
+      data: 'What happened in its last minute? A final message on brownout or shock, and a reset cause stored for the next start, would say.' }
   ];
   var sigOn = 0;
   function sigCards() {
@@ -488,7 +497,7 @@
       b.innerHTML = '<b>' + sg.name + '</b><span>' + sg.n + ' of ' + D.n_silent + ' stork tags</span>';
       b.addEventListener('click', function () { sigOn = i; sigCards(); drawCollar('#benchviz', SIGS[i].parts); });
       var body = document.createElement('div'); body.className = 'body';
-      body.innerHTML = '<p><b>Seen in the data</b>' + sg.seen + '</p><p><b>Confirm on the bench</b>' + sg.bench + '</p><p><b>The design change it points to</b>' + sg.design + '</p>';
+      body.innerHTML = '<p><b>Seen in the data</b>' + sg.seen + '</p><p><b>Confirm on the bench</b>' + sg.bench + '</p><p><b>What the data would need to carry</b>' + sg.data + '</p>';
       d.appendChild(b); d.appendChild(body); host.appendChild(d);
     });
   }
@@ -507,15 +516,16 @@
     var root = $('#tour'), hl = $('.tour-hl', root), card = $('.tour-card', root), idx = 0;
     var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
     var STEPS = [
-      { sel: 'header h1', k: 'Welcome · 1 of 9', html: 'This page asks whether a collar’s own housekeeping data could have warned that it was about to go quiet, and whether it shows why. The data is public: ' + V.tags + ' solar GPS tags on storks and ' + V.b_collars + ' collars on buffalo.' },
-      { sel: '#bluf', k: 'The answer · 2 of 9', html: 'Up is quiet tags warned in time, right is healthy collar months flagged by mistake. The orange line is my four rules, the blue line a low battery alarm, and they overlap. Under the chart, <b>a slider</b> sets how many false alarms you accept and the tiles count what each alarm catches.' },
-      { sel: '#qgrid', k: 'The short answers · 3 of 9', html: 'Four questions, one answer each. The first is the one that hurts: the rules I fixed in advance tied a plain low battery alarm.' },
-      { sel: '#domainviz', k: 'The collar · 4 of 9', html: 'What a collar is, as blocks, and the housekeeping field that watches each block. Every signature later on points at one of these.' },
-      { sel: '#leadcard', k: 'How early · 5 of 9', html: 'Each dot is a tag, placed at the day its alarm first fired. <b>Click a dot</b> to open that tag below. The grey band holds alarms that were already on before the final month.' },
-      { sel: '#picker', k: 'Every ending · 6 of 9', html: 'All ' + V.silent + ' tags that went quiet, one square each, sorted into the five signatures. Red squares are birds seen alive after the tag stopped. <b>Click any square</b> to see its last 45 days.' },
-      { sel: '#sixhead', k: 'The real failures · 7 of 9', html: 'The ' + V.alive_n + ' tags that failed while their bird lived on. These are the ones a failure analyst wants first, and the plain threshold did better on them than my rules. Each card below quotes the researchers and opens the tag’s last 45 days.' },
-      { sel: '#herdviz', k: 'Livestock · 8 of 9', html: 'The same reporting rule on ' + V.b_collars + ' buffalo collars, which send no voltage. The chips above the chart choose the collar; <b>click a red one</b> to see a collar that stopped early against the herd.' },
-      { sel: '#sigs .sig', k: 'To the bench · 9 of 9', html: 'Each signature with the bench evidence that would confirm it and the design change it would point to. <b>Click a signature</b>; the drawing marks the parts.' }
+      { sel: 'header h1', k: 'Welcome · 1 of 10', html: 'This page asks whether a collar’s own housekeeping data could have warned that it was about to go quiet, and whether it shows why. The data is public: ' + V.tags + ' solar GPS tags on storks and ' + V.b_collars + ' collars on buffalo.' },
+      { sel: '#bluf', k: 'The answer · 2 of 10', html: 'Up is quiet tags warned in time, right is healthy collar months flagged by mistake. The orange line is my four rules, the blue line a low battery alarm, and they overlap. Under the chart, <b>a slider</b> sets how many false alarms you accept and the tiles count what each alarm catches.' },
+      { sel: '#qgrid', k: 'The short answers · 3 of 10', html: 'Four questions, one answer each. The first is the one that hurts: the rules I fixed in advance tied a plain low battery alarm.' },
+      { sel: '#domainviz', k: 'The collar · 4 of 10', html: 'What a collar is, as blocks, and the housekeeping field that watches each block. Every signature later on points at one of these.' },
+      { sel: '#leadcard', k: 'How early · 5 of 10', html: 'Each dot is a tag, placed at the day its alarm first fired. <b>Click a dot</b> to open that tag below. The grey band holds alarms that were already on before the final month.' },
+      { sel: '#picker', k: 'Every ending · 6 of 10', html: 'All ' + V.silent + ' tags that went quiet, one square each, sorted into the five signatures. Red squares are birds seen alive after the tag stopped. <b>Click any square</b> to see its last 45 days.' },
+      { sel: '#sixhead', k: 'The real failures · 7 of 10', html: 'The ' + V.alive_n + ' tags that failed while their bird lived on. These are the ones a failure analyst wants first. Six are too few to compare alarms on, so each card gives what the tag\u2019s own data showed and quotes the researchers.' },
+      { sel: '#herdviz', k: 'Livestock · 8 of 10', html: 'The same reporting rule on ' + V.b_collars + ' buffalo collars, which send no voltage. The chips above the chart choose the collar; <b>click a red one</b> to see a collar that stopped early against the herd.' },
+      { sel: '#protocol li:nth-child(3)', k: 'A returned unit · 9 of 10', html: 'Step three of five in the order a returned unit goes through. A unit that works at rest has not been shown healthy, so the stress step comes before anything is called no fault found.' },
+      { sel: '#sigs .sig', k: 'To the bench · 10 of 10', html: 'Each signature with the bench work that would confirm it and the field a unit would need to report to settle it. <b>Click a signature</b>; the drawing marks the parts.' }
     ];
     function place() {
       var st = STEPS[idx], elm = document.querySelector(st.sel);
@@ -527,7 +537,7 @@
       var target = Math.max(0, Math.min(docTop - 14, maxScroll)), vTop = docTop - target;
       var cw = Math.min(400, innerWidth - 32), ch = 250;
       var fitsRight = r.left + r.width + 18 + cw <= innerWidth - 16;
-      var hh = fitsRight ? r.height : Math.max(120, Math.min(r.height, innerHeight - vTop - ch - 40));
+      var hh = fitsRight ? r.height : Math.max(120, Math.min(r.height, innerHeight - vTop - ch - 24));
       hl.style.left = (docLeft - 8) + 'px'; hl.style.top = (docTop - 8) + 'px';
       hl.style.width = (r.width + 16) + 'px'; hl.style.height = (hh + 16) + 'px';
       var dots = STEPS.map(function (_, i) { return '<i class="' + (i === idx ? 'on' : '') + '"></i>'; }).join('');

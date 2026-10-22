@@ -1,4 +1,4 @@
-# Which collars were failing before they went quiet?
+# Which tags went quiet, and could their own data have said so?
 
 A field failure study on public tracking collar data. It asks whether the housekeeping data a
 solar GPS collar already sends (battery voltage, GPS fix success, time to fix, messages per day,
@@ -9,25 +9,25 @@ Live page: https://bolgacg.github.io/collar-triage/
 
 The short answer is no on the first question. Four rules fixed before the data was read warned
 41 of 101 tags that went quiet, and a single voltage threshold set to the same false alarm rate
-warned 40. One rule on its own, "stopped moving", is worth keeping; the GPS rule is no better
+warned 40, with its level chosen on the same data. One rule on its own, "stopped moving", is worth keeping; the GPS rule is no better
 than chance; and 55 of the 101 endings show no sign in any field, so only the unit itself can
 explain them. The page says all of this on its first screen.
 
-None of the data is Halter's or Gallagher's, and nothing here describes either company's hardware.
+It is public research data and describes no company's hardware.
 
 ## What is here
 
 | Path | What it does |
 |---|---|
-| `PREREGISTRATION.md` | The rules and the scoring, written and committed before the daily data was opened, and every change since with its reason |
+| `PREREGISTRATION.md` | The rules and the scoring, written and committed before the daily data was opened (commit 26340c5), and every change since with its date and reason |
 | `study/fetch.py` | Downloads the two public datasets into `data/raw/` (about 510 MB, not committed) |
-| `study/daily_eobs.py` | Streams the stork tags' 12.9 million rows into one row per tag per day |
+| `study/daily_eobs.py` | Streams the stork tags' GPS rows into one row per tag per day, keeping the 12.8 million the data owners did not flag as outliers |
 | `study/buffalo_daily.py` | The same for the buffalo collars |
 | `study/score.py` | Runs the alarms over every day of every tag, scores them, writes `data/results.json` |
 | `study/build_page_data.py` | Writes `docs/data.js` and fills every number into `docs/index.html` from `docs/template.html` |
 | `study/verify_page.js` | Renders the page headless at four widths, checks for script errors and overflow, walks the tour |
 | `study/check_copy.js` | Reads every visible string, including chart labels, for dashes and banned phrasing |
-| `data/storks_daily.csv`, `data/buffalo_daily.csv` | The daily summaries, so the scoring can be rerun without the download |
+| `data/storks_daily.csv`, `data/buffalo_daily.csv`, `data/storks_reference.csv` | The daily summaries and the researchers' record of how each deployment ended, so the scoring can be rerun without the download |
 | `docs/` | The page |
 
 ## Running it
